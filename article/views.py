@@ -15,7 +15,62 @@ from django.core.paginator import Paginator
 
 from comment.models import Comment
 
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView
+
 import markdown
+
+
+class ContextMixin:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['order'] = 'total_views'
+        return context
+
+class ArticleListView(ContextMixin, ListView):
+    # 上下文的名称
+    context_object_name = 'articles'
+    # 查询集
+    queryset = ArticlePost.objects.all()
+    # 模板位置
+    template_name = 'article/list.html'
+
+    def get_queryset(self):
+        queryset = ArticlePost.objects.all()
+        return queryset
+
+
+class ArticleDetailView(DetailView):
+    """
+    文章详情类视图
+    """
+    queryset = ArticlePost.objects.all()
+    context_object_name = 'article'
+    template_name = 'article/detail.html'
+
+    def get_object(self):
+        """
+        获取需要展示的对象
+        """
+        # 首先调用父类的方法
+        obj = super(ArticleDetailView, self).get_object()
+        # 浏览量 +1
+        obj.total_views += 1
+        obj.save(update_fields=['total_views'])
+        return obj
+
+
+class ArticleCreateView(CreateView):
+    """
+    创建文章的类视图
+    """
+    model = ArticlePost
+    fields = '__all__'
+    # 或者有选择的提交字段，比如：
+    # fields = ['title']
+    template_name = 'article/create_by_class_view.html'
+
+
 
 def article_list(request):
     search = request.GET.get('search')

@@ -15,4 +15,11 @@ urlpatterns = [
     path('article-update/<int:id>/', views.article_update, name='article_update'),
     # 删除文章
     path('article-safe-delete/<int:id>/', views.article_safe_delete, name='article_safe_delete'),
+
+    # 列表类视图
+    path('list-view/', views.ArticleListView.as_view(), name='list_view'),
+    # 详情类视图
+    path('detail-view/<int:pk>/', views.ArticleDetailView.as_view(), name='detail_view'),
+    # 创建类视图
+    path('create-view/', views.ArticleCreateView.as_view(), name='create_view'),
 ]
