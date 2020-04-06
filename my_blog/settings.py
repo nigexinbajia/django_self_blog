@@ -20,7 +20,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-*sd0rd7c_pr-215n!^#z+=h(pzk%7snaop_-i$n=3$tpp5hw0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -128,15 +127,3 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
-
-# SMTP邮件服务器，改为你的邮箱stmp
-EMAIL_HOST = "smtp.163.com"
-EMAIL_HOST_USER = "www95175300lin@163.com"
-EMAIL_HOST_PASSWORD = "nigexinbajia"
-EMAIL_POST = 25
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = "Blog <www95175300lin@163.com>"
-
-# 媒体文件地址
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
