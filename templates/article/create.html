@@ -25,7 +25,7 @@
                     <label for="column">栏目</label>
                     <select class="form-control" id="column" name="column">
                         <option value="none">请选择栏目...</option>
-                        {% for columns in columns %}
+                        {% for column in columns %}
                             <option value="{{ column.id }}">{{ column }}</option>
                         {% endfor %}
                     </select>
