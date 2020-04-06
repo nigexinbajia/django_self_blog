@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 from django.http import HttpResponse
 
-from .models import ArticlePost
+from .models import ArticlePost, ArticleColumn
 
 from django.db.models import Q
 
@@ -129,13 +129,18 @@ def article_create(request):
             new_article = article_post_form.save(commit=False)
             # 指定数据库id=1的用户为作者
             new_article.author = User.objects.get(id=request.user.id)
+
+            if request.POST['column'] != "none":
+                new_article.column = ArticleColumn.objects.get(id=request.POST['column'])
+
             new_article.save()
             return redirect("article:article_list")
         else:
             return HttpResponse("表单内容有误，请重新填写。")
     else:
         article_post_form = ArticlePostForm()
-        context = { 'article_post_form': article_post_form}
+        columns = ArticleColumn.objects.all()
+        context = { 'article_post_form': article_post_form, 'columns':columns}
         return render(request, 'article/create.html', context)
 
 @login_required(login_url='/userprofile/login/')
@@ -149,13 +154,18 @@ def article_update(request, id):
         if article_post_form.is_valid():
             article.title = request.POST['title']
             article.body = request.POST['body']
+            if request.POST['column'] != "none":
+                article.column = ArticleColumn.objects.get(id=request.POST['column'])
+            else:
+                article.column = None
             article.save()
             return redirect("article:article_detail", id=id)
         else:
             return HttpResponse("表单内容有误，请重新填写。")
     else:
         article_post_form = ArticlePostForm()
-        context = {'article':article, 'article_post_form':article_post_form}
+        columns = ArticleColumn.objects.all()
+        context = {'article':article, 'article_post_form':article_post_form, 'columns':columns}
         return render(request, 'article/update.html', context)
 
 # 删除文章的视图
